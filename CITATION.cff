@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "If you use this research prototype, please cite this repository."
+title: "gonggong-disaster-series-rescue79"
+type: software
+authors:
+  - name: "obundh"
+version: 0.1.0
+date-released: 2026-08-12
+license: MIT
+repository-code: "https://github.com/obundh/gonggong-disaster-series-rescue79"

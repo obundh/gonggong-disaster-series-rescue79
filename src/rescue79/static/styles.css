@@ -1,0 +1,138 @@
+:root {
+  color-scheme: light;
+  --red: #b62d26;
+  --red-soft: #fff0ed;
+  --navy: #14243b;
+  --blue: #155ea8;
+  --green: #16704a;
+  --amber: #8a5b08;
+  --paper: #fffdf8;
+  --line: #c9c2b6;
+  --text: #171717;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: #f3f1ec;
+  color: var(--text);
+  font-family: "Malgun Gothic", "Apple SD Gothic Neo", system-ui, sans-serif;
+  font-size: 19px;
+  line-height: 1.65;
+}
+
+.skip {
+  position: absolute;
+  left: -10000px;
+  top: 0;
+  padding: 12px;
+  background: #fff;
+}
+.skip:focus { left: 12px; z-index: 10; }
+
+header {
+  padding: 36px 20px 30px;
+  background: var(--paper);
+  border-bottom: 5px solid var(--red);
+  text-align: center;
+}
+
+.brand { color: var(--red); font-weight: 800; letter-spacing: .04em; }
+h1 { margin: 8px 0; color: var(--navy); font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.2; }
+.lead { margin: 8px auto 0; max-width: 760px; font-size: 1.15rem; }
+
+main { width: min(1080px, calc(100% - 28px)); margin: 24px auto 50px; }
+
+.danger {
+  padding: 18px 22px;
+  background: var(--red-soft);
+  border: 3px solid var(--red);
+  border-radius: 14px;
+  font-size: 1.08rem;
+}
+
+.steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 20px 0; }
+.steps div {
+  min-height: 95px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  background: var(--navy);
+  color: white;
+  border-radius: 14px;
+}
+.steps b {
+  display: grid;
+  place-items: center;
+  flex: 0 0 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: white;
+  color: var(--navy);
+  font-size: 1.25rem;
+}
+
+.card {
+  margin-top: 20px;
+  padding: clamp(20px, 4vw, 34px);
+  background: white;
+  border: 2px solid var(--line);
+  border-radius: 18px;
+  box-shadow: 0 6px 20px rgba(31, 28, 23, .08);
+}
+h2 { margin: 0 0 8px; color: var(--navy); font-size: 1.55rem; }
+.controls h2:not(:first-child) { margin-top: 32px; }
+
+.digit-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+button, .file-button {
+  min-height: 64px;
+  padding: 14px 24px;
+  border: 3px solid var(--blue);
+  border-radius: 14px;
+  background: white;
+  color: var(--blue);
+  font: inherit;
+  font-weight: 800;
+  text-align: center;
+  cursor: pointer;
+}
+button:hover, button:focus-visible, .file-button:hover, .file-button:focus-visible { outline: 4px solid #ffd349; outline-offset: 3px; }
+.digit.selected { background: var(--blue); color: white; }
+.file-button { display: inline-flex; align-items: center; margin-top: 8px; }
+#imageFile { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.primary { width: 100%; margin-top: 22px; background: var(--red); border-color: var(--red); color: white; font-size: 1.25rem; }
+button:disabled { background: #ddd; border-color: #bbb; color: #666; cursor: not-allowed; }
+.muted, .hint { color: #555; }
+.status { min-height: 32px; padding: 10px 0; font-weight: 700; color: var(--navy); }
+
+.image-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+figure { margin: 0; }
+figcaption { margin-bottom: 8px; font-weight: 800; }
+figure img { display: block; width: 100%; max-height: 650px; object-fit: contain; background: #1b1b1b; border: 3px solid #444; border-radius: 12px; }
+
+.verdict { display: inline-block; padding: 10px 18px; border-radius: 999px; font-size: 1.4rem; font-weight: 900; }
+.verdict.correct { background: #e1f5e8; color: var(--green); }
+.verdict.incorrect { background: var(--red-soft); color: var(--red); }
+.verdict.abstain { background: #fff4d5; color: var(--amber); }
+.reason { font-size: 1.1rem; font-weight: 700; }
+.facts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 22px 0; }
+.facts div { display: flex; justify-content: space-between; gap: 16px; padding: 12px 16px; background: #f5f6f8; border-radius: 10px; }
+dt { font-weight: 800; }
+dd { margin: 0; }
+.score-note { padding: 15px 18px; border-left: 6px solid var(--amber); background: #fff9e9; }
+.hidden { display: none; }
+.help li { margin: 8px 0; }
+footer { padding: 24px; background: var(--navy); color: white; text-align: center; font-weight: 700; }
+
+@media (max-width: 760px) {
+  body { font-size: 18px; }
+  .steps, .image-grid, .facts { grid-template-columns: 1fr; }
+  .steps div { min-height: 70px; }
+  .digit-buttons { grid-template-columns: 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { scroll-behavior: auto !important; }
+}

@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Rescue79 정적 7·9 모델 검토기</title>
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="/static/styles.css">
+  </head>
+  <body>
+    <a class="skip" href="#main">본문으로 바로 가기</a>
+    <header>
+      <div class="brand">공공 재난 시리즈 · Rescue79</div>
+      <h1>사진 한 장의 7·9 자세를 함께 확인해요</h1>
+      <p class="lead">정답을 알고 있는 시험사진으로 모델을 점검하는 로컬 연구 도구입니다.</p>
+    </header>
+
+    <main id="main">
+      <section class="danger" aria-label="중요 안전 안내">
+        <strong>중요:</strong> 이 도구는 구조 요청을 확정하지 않고 112·119에 신고하지 않습니다.
+        실제 위험하면 프로그램을 기다리지 말고 사람이 직접 확인하고 필요한 기관에 연락하세요.
+      </section>
+
+      <section class="steps" aria-label="사용 순서">
+        <div><b>1</b><span>정답 7 또는 9 선택</span></div>
+        <div><b>2</b><span>사진 한 장 선택</span></div>
+        <div><b>3</b><span>검토 시작 누르기</span></div>
+        <div><b>4</b><span>원본과 관절선 확인</span></div>
+      </section>
+
+      <section class="card controls">
+        <h2>1. 사진의 정답은 무엇인가요?</h2>
+        <p>모델을 시험하는 도구이므로 내가 이미 알고 있는 정답을 먼저 고릅니다.</p>
+        <div class="digit-buttons" role="radiogroup" aria-label="시험사진 정답">
+          <button class="digit" type="button" data-digit="7" aria-pressed="false">숫자 7</button>
+          <button class="digit" type="button" data-digit="9" aria-pressed="false">숫자 9</button>
+        </div>
+
+        <h2>2. 사진을 골라 주세요</h2>
+        <label class="file-button" for="imageFile">사진 찾기</label>
+        <input id="imageFile" type="file" accept="image/png,image/jpeg,image/webp">
+        <p id="fileName" class="muted">아직 선택한 사진이 없습니다.</p>
+        <p class="hint">한 사람의 머리·몸·양팔이 밝고 크게 보이는 PNG, JPG, WEBP 사진이 좋습니다.</p>
+
+        <button id="reviewButton" class="primary" type="button" disabled>3. 모델 검토 시작</button>
+        <p id="status" class="status" role="status" aria-live="polite">모델 상태를 확인하는 중입니다…</p>
+      </section>
+
+      <section id="result" class="card hidden" aria-live="polite">
+        <h2>4. 결과를 원본과 함께 확인하세요</h2>
+        <div id="verdict" class="verdict"></div>
+        <p id="reason" class="reason"></p>
+        <div class="image-grid">
+          <figure>
+            <figcaption>내가 고른 원본 사진</figcaption>
+            <img id="originalPreview" alt="사용자가 고른 원본 시험사진">
+          </figure>
+          <figure>
+            <figcaption>모델이 찾은 관절선</figcaption>
+            <img id="overlayPreview" alt="모델이 찾은 사람 관절선과 판별 결과">
+          </figure>
+        </div>
+        <dl class="facts">
+          <div><dt>내가 고른 정답</dt><dd id="expected"></dd></div>
+          <div><dt>모델의 첫 번째 결과</dt><dd id="predicted"></dd></div>
+          <div><dt>관절 품질</dt><dd id="quality"></dd></div>
+          <div><dt>찾은 사람 수</dt><dd id="personCount"></dd></div>
+          <div><dt>보인 관절 수</dt><dd id="jointCount"></dd></div>
+          <div><dt>비보정 순위 점수</dt><dd id="score"></dd></div>
+        </dl>
+        <aside class="score-note">
+          점수가 0.99여도 “정답 확률 99%”나 “구조 요청 확률 99%”라는 뜻이 아닙니다.
+          모델이 여러 답 중 무엇을 더 높게 보았는지 나타내는 비보정 순위 점수입니다.
+        </aside>
+      </section>
+
+      <section class="card help">
+        <h2>결과의 쉬운 뜻</h2>
+        <ul>
+          <li><b>정답:</b> 모델 결과와 내가 고른 정답이 같습니다. 관절선도 맞는지 봅니다.</li>
+          <li><b>오답:</b> 모델 결과가 다릅니다. 사진과 결과를 시험 기록으로 남깁니다.</li>
+          <li><b>판정 보류:</b> 사람 또는 관절 정보가 부족합니다. 억지로 답을 만들지 않은 정상 동작입니다.</li>
+        </ul>
+        <p><a href="https://github.com/obundh/gonggong-disaster-series-rescue79#readme">자세한 설명서 보기</a></p>
+      </section>
+    </main>
+
+    <footer>
+      연구·교육·모델 검토용 · 실제 CCTV 성능 미측정 · 사람 검토 필수 · 자동 신고 없음
+    </footer>
+    <script src="/static/app.js"></script>
+  </body>
+</html>
