@@ -34,7 +34,7 @@ def runtime() -> Runtime:
 
 app = FastAPI(
     title="Rescue79 정적 7·9 모델 검토기",
-    version="0.1.0",
+    version="0.2.0",
     docs_url=None,
     redoc_url=None,
     openapi_url=None,

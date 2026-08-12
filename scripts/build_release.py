@@ -9,7 +9,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT_DIR = ROOT / ".release"
-VERSION = "0.1.0"
+VERSION = "0.2.0"
 ARCHIVE_NAME = f"gonggong-disaster-series-rescue79-v{VERSION}.zip"
 
 

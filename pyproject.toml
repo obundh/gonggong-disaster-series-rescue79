@@ -1,6 +1,6 @@
 [project]
 name = "gonggong-disaster-series-rescue79"
-version = "0.1.0"
+version = "0.2.0"
 description = "Local human-reviewed static D7/D9 generated-still model reviewer"
 readme = "README.md"
 requires-python = ">=3.12,<3.13"

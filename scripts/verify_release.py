@@ -26,6 +26,30 @@ REQUIRED_DOCS = (
     "THIRD_PARTY_NOTICES.md",
     "ASSET_LICENSE.md",
 )
+COMIC_NAMES = (
+    "01_problem.png",
+    "02_gap.png",
+    "03_proposal.png",
+    "04_flow.png",
+    "05_method.png",
+    "06_validation.png",
+    "07_next_steps.png",
+)
+COMIC_REFERENCE_DOCS = (
+    "README.md",
+    "docs/COMICS_ALT_TEXT_KO.md",
+)
+PUBLIC_CORE_DOCS = REQUIRED_DOCS + ("docs/COMICS_ALT_TEXT_KO.md",)
+OLD_COMIC_NAMES = (
+    "02_solution.png",
+    "03_training.png",
+    "04_performance.png",
+    "05_safe_rollout.png",
+    "06_verification.png",
+)
+COMIC_REFERENCE_PATTERN = re.compile(
+    r"(?:docs/comics/)?([0-9]{2}_[A-Za-z0-9_]+\.png)"
+)
 SECRET_PATTERNS = (
     re.compile(r"glpat-[A-Za-z0-9_-]{10,}"),
     re.compile(r"ghp_[A-Za-z0-9]{20,}"),
@@ -42,11 +66,36 @@ def digest(path: Path) -> str:
     return value.hexdigest()
 
 
+def comic_references(text: str) -> set[str]:
+    return set(COMIC_REFERENCE_PATTERN.findall(text))
+
+
 def main() -> None:
     for name in REQUIRED_DOCS:
         path = ROOT / name
         if not path.is_file() or path.stat().st_size < 100:
             raise SystemExit(f"Missing or incomplete document: {name}")
+
+    expected_comics = set(COMIC_NAMES)
+    for name in COMIC_REFERENCE_DOCS:
+        path = ROOT / name
+        if not path.is_file():
+            raise SystemExit(f"Missing comic reference document: {name}")
+        references = comic_references(path.read_text(encoding="utf-8"))
+        if references != expected_comics:
+            missing = sorted(expected_comics - references)
+            unexpected = sorted(references - expected_comics)
+            raise SystemExit(
+                f"Comic references mismatch in {name}: "
+                f"missing={missing}, unexpected={unexpected}"
+            )
+
+    for name in PUBLIC_CORE_DOCS:
+        path = ROOT / name
+        text = path.read_text(encoding="utf-8")
+        for old_name in OLD_COMIC_NAMES:
+            if old_name in text:
+                raise SystemExit(f"Old comic name remains in {name}: {old_name}")
 
     checkpoint = torch.load(MODEL, map_location="cpu", weights_only=True)
     if digest(MODEL) != MODEL_SHA256:
@@ -59,7 +108,13 @@ def main() -> None:
     comics = sorted((ROOT / "docs" / "comics").glob("*.png"))
     screenshots = sorted((ROOT / "docs" / "screenshots").glob("*.png"))
     examples = sorted((ROOT / "examples").glob("*.png"))
-    if len(comics) != 6 or len(screenshots) != 4 or len(examples) != 2:
+    actual_comic_names = tuple(path.name for path in comics)
+    if actual_comic_names != COMIC_NAMES:
+        raise SystemExit(
+            f"Comic allowlist mismatch: expected={list(COMIC_NAMES)}, "
+            f"actual={list(actual_comic_names)}"
+        )
+    if len(screenshots) != 4 or len(examples) != 2:
         raise SystemExit(
             f"Asset count mismatch: comics={len(comics)}, "
             f"screenshots={len(screenshots)}, examples={len(examples)}"
@@ -71,8 +126,23 @@ def main() -> None:
     manifest = ROOT / "artifacts_manifest.csv"
     with manifest.open("r", encoding="utf-8-sig", newline="") as handle:
         rows = list(csv.DictReader(handle))
-    if len(rows) != 12:
-        raise SystemExit(f"Asset manifest must contain 12 rows, got {len(rows)}")
+    if len(rows) != 13:
+        raise SystemExit(f"Asset manifest must contain 13 rows, got {len(rows)}")
+    expected_manifest_paths = {
+        *(f"docs/comics/{name}" for name in COMIC_NAMES),
+        *(path.relative_to(ROOT).as_posix() for path in screenshots),
+        *(path.relative_to(ROOT).as_posix() for path in examples),
+    }
+    manifest_paths = [row["path"] for row in rows]
+    if len(manifest_paths) != len(set(manifest_paths)):
+        raise SystemExit("Asset manifest contains duplicate paths")
+    if set(manifest_paths) != expected_manifest_paths:
+        missing = sorted(expected_manifest_paths - set(manifest_paths))
+        unexpected = sorted(set(manifest_paths) - expected_manifest_paths)
+        raise SystemExit(
+            f"Asset manifest path mismatch: missing={missing}, "
+            f"unexpected={unexpected}"
+        )
     for row in rows:
         relative_path = row["path"]
         path = ROOT / relative_path
