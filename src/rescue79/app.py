@@ -18,17 +18,10 @@ MAX_MULTIPART_BYTES = MAX_IMAGE_BYTES + 512 * 1024
 
 
 def _resolve_model_path() -> Path:
-    """Find the bundled model in an editable checkout or an installed wheel."""
+    """Find the bundled model in the supported source-checkout layout."""
 
     filename = "rescue79-hard4-portable-v1.pt"
-    candidates = (
-        PACKAGE_DIR.parents[1] / "models" / filename,
-        PACKAGE_DIR.parent / "models" / filename,
-    )
-    for candidate in candidates:
-        if candidate.is_file():
-            return candidate
-    return candidates[0]
+    return PACKAGE_DIR.parents[1] / "models" / filename
 
 
 MODEL_PATH = _resolve_model_path()
